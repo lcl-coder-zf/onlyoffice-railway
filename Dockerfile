@@ -1,6 +1,7 @@
 FROM onlyoffice/documentserver:7.5.1.1
 
-# Fix "duplicate default server for [::]:80" conflict between the Ubuntu nginx
-# default site and ONLYOFFICE's nginx config. Remove the default_server flag
-# from the IPv6 listen directive in /etc/nginx/sites-available/default.
-RUN sed -i 's/listen \[::\]:80 default_server;/listen [::]:80;/' /etc/nginx/sites-available/default
+# Remove the Ubuntu default nginx site that conflicts with ONLYOFFICE.
+# Two configs claiming default_server for [::]:80 causes nginx to fail on start.
+RUN rm -f /etc/nginx/sites-enabled/default
+
+EXPOSE 80
